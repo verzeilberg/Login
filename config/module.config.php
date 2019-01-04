@@ -183,4 +183,15 @@ return [
             ]
         ]
     ],
+    // Configuration for your SMTP server (for sending outgoing mail).
+    'smtp' => [
+        'name'              => 'localhost.localdomain',
+        'host'              => '127.0.0.1',
+        'port'              => 25,
+        'connection_class'  => 'plain',
+        'connection_config' => [
+            'username' => '<user>',
+            'password' => '<pass>',
+        ],
+    ],
 ];
