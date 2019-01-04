@@ -229,7 +229,10 @@ class UserManager
         $this->entityManager->flush();
         
         // Send an email to user.
-        $subject = 'Password Reset';
+        // Mailing settings
+        $subject = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['subject'];
+        $senderEmail = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['sender_mail'];
+        $senderName = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['sender_name'];
             
         $httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
 
@@ -256,14 +259,14 @@ class UserManager
         $mail = new Mail\Message();
         $mail->setEncoding('UTF-8');
         $mail->setBody($body);
-        $mail->setFrom('no-reply@example.com', 'User Demo');
+        $mail->setFrom($senderEmail, $senderName);
         $mail->addTo($user->getEmail(), $user->getFullName());
         $mail->setSubject($subject);
         
         // Setup SMTP transport
         $transport = new SmtpTransport();
-        $options   = new SmtpOptions($this->config['smtp']);
-        $transport->setOptions($options);
+        //$options   = new SmtpOptions($this->config['smtp']);
+        //$transport->setOptions($options);
 
         $transport->send($mail);
     }
