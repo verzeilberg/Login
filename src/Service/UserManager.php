@@ -238,7 +238,6 @@ class UserManager
             $httpPrecursor = 'https';
         }
 
-
         $passwordResetUrl = $httpPrecursor . '://' . $httpHost . '/set-password?token=' . $token . "&email=" . $user->getEmail();
         
         // Produce HTML of password reset email
@@ -292,8 +291,9 @@ class UserManager
         
         // Check that token was created not too long ago.
         $tokenCreationDate = $user->getPasswordResetTokenCreationDate();
-        $tokenCreationDate = strtotime($tokenCreationDate);
-        
+
+        $tokenCreationDate = strtotime($tokenCreationDate->format('Y-m-d H:i:s'));
+
         $currentDate = strtotime('now');
         
         if ($currentDate - $tokenCreationDate > 24*60*60) {

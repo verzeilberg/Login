@@ -6,6 +6,9 @@ use Zend\Router\Http\Segment;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
+    'login_settings' => [
+
+    ],
     'router' => [
         'routes' => [
             'login' => [
