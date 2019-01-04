@@ -233,7 +233,8 @@ class UserManager
         $subject = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['subject'];
         $senderEmail = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['sender_mail'];
         $senderName = $this->config['login_settings']['mailing_settings']['password_reset_token_mail']['sender_name'];
-            
+
+
         $httpHost = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:'localhost';
 
         $httpPrecursor = 'http';
@@ -267,6 +268,9 @@ class UserManager
         $transport = new SmtpTransport();
         //$options   = new SmtpOptions($this->config['smtp']);
         //$transport->setOptions($options);
+
+
+        var_Dump($transport->send($mail));
 
         $transport->send($mail);
     }
