@@ -1,0 +1,171 @@
+<?php
+namespace User\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * This class represents a role.
+ * @ORM\Entity()
+ * @ORM\Table(name="role")
+ */
+class Role
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", length=11)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /** 
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)  
+     */
+    protected $name;
+    
+    /** 
+     * @ORM\Column(name="description", type="text", nullable=true)  
+     */
+    protected $description;
+
+    /** 
+     * @ORM\Column(name="date_created", type="datetime", nullable=false)
+     */
+    protected $dateCreated;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User\Entity\Role", mappedBy="childRoles")
+     * @ORM\JoinTable(name="role_hierarchy",
+     *      joinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")}
+     *      )
+     */
+    private $parentRoles;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="User\Entity\Role", inversedBy="parentRoles")
+     * @ORM\JoinTable(name="role_hierarchy",
+     *      joinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $childRoles;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="User\Entity\Permission", inversedBy="roles")
+     * @ORM\JoinTable(name="role_permission",
+     *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
+     *      )
+     */
+    private $permissions;
+    
+    /**
+     * Constructor.
+     */
+    public function __construct() 
+    {
+        $this->parentRoles = new ArrayCollection();
+        $this->childRoles = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
+    }
+    
+    /**
+     * Returns role ID.
+     * @return integer
+     */
+    public function getId() 
+    {
+        return $this->id;
+    }
+
+    /**
+     * Sets role ID. 
+     * @param int $id    
+     */
+    public function setId($id) 
+    {
+        $this->id = $id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+    
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
+    
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = new \DateTime($dateCreated);
+    }
+    
+    public function getParentRoles()
+    {
+        return $this->parentRoles;
+    }
+    
+    public function getChildRoles()
+    {
+        return $this->childRoles;
+    }
+    
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    public function addParent(Role $role)
+    {
+        if ($this->getId() == $role->getId()) {
+            return false;
+        }
+        if (!$this->hasParent($role)) {
+            $this->parentRoles[] = $role;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Clear parent roles
+     */
+    public function clearParentRoles()
+    {
+        $this->parentRoles = new ArrayCollection();
+    }
+
+    /**
+     * Check if parent role exists
+     * @param Role $role
+     * @return bool
+     */
+    public function hasParent(Role $role)
+    {
+        if ($this->getParentRoles()->contains($role)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+
+

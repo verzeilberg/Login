@@ -1,0 +1,51 @@
+<?php
+$this->headTitle('Sign in');
+
+$this->mainMenu()->setActiveItemId('login');
+
+$form->get('email')->setAttributes([
+    'class'=>'form-control', 
+    'placeholder'=>'Email address',
+    'required' => true,
+    'autofocus' => true
+    ])
+    ->setLabelAttributes([
+        'class' => 'sr-only'
+    ]);
+
+$form->get('password')->setAttributes([
+    'class'=>'form-control', 
+    'placeholder'=>'Password',
+    'required' => true,
+    ])
+    ->setLabelAttributes([
+        'class' => 'sr-only'
+    ]);
+?>
+
+<div class="row justify-content-md-center">
+    <div class="col-md-3">
+        <form class="form-signin" method="post">
+            <h2 class="form-signin-heading mb-3">Please sign in</h2>
+            <?php if ($isLoginError): ?>
+            <div class="alert alert-warning" role="alert">
+                Incorrect login and/or password. 
+                <a href="<?php echo $this->url('reset-password') ?>">Forgot password?</a>
+            </div>
+            <?php endif; ?>
+            <?php echo $this->formLabel($form->get('email')); ?>
+            <?php echo $this->formElement($form->get('email')); ?>
+            <br/>
+            <?php echo $this->formLabel($form->get('password')); ?>
+            <?php echo $this->formElement($form->get('password')); ?>
+            <div class="checkbox">
+                <label>
+                    <?php echo $this->formElement($form->get('remember_me')); ?> Remember me
+                </label>
+            </div>
+            <?php echo $this->formElement($form->get('redirect_url')); ?>
+            <?php echo $this->formElement($form->get('csrf')) ?>
+            <button class="btn btn-lg btn-dark btn-block" type="submit">Sign in</button>
+        </form>
+    </div>
+</div>
