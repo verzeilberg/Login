@@ -3,10 +3,6 @@ namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
-use Application\Entity\Post;
 use User\Entity\User;
 use User\Entity\Role;
 use User\Form\UserForm;
@@ -56,11 +52,9 @@ class UserController extends AbstractActionController
         
         $query = $this->entityManager->getRepository(User::class)
                 ->findAllUsers();
-        
-        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
-        $paginator = new Paginator($adapter);
-        $paginator->setDefaultItemCountPerPage(3);        
-        $paginator->setCurrentPageNumber($page);
+
+        $paginator = $this->entityManager->getRepository(User::class)
+            ->getUsersForPagination($query, $page);
          	         
         return new ViewModel([
             'users' => $paginator

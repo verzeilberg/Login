@@ -2,6 +2,12 @@
 namespace User\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Paginator\Paginator;
+/*
+ * Entity
+ */
 use User\Entity\User;
 
 /**
@@ -25,4 +31,19 @@ class UserRepository extends EntityRepository
         
         return $queryBuilder->getQuery();
     }
+
+    /**
+     * Retrieves all users for pagination
+     * @return object
+     */
+    public function getUsersForPagination($query, $currentPage = 1, $itemCountPerPage = 10)
+    {
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new Paginator($adapter);
+        $paginator->setDefaultItemCountPerPage($itemCountPerPage);
+        $paginator->setCurrentPageNumber($currentPage);
+
+        return $paginator;
+    }
+
 }
