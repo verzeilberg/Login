@@ -76,7 +76,7 @@ return [
                         'id' => '[a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
-                        'controller'    => Controller\UserController::class,
+                        'controller'    => 'userbeheer',
                         'action'        => 'index',
                     ],
                 ],
@@ -90,7 +90,7 @@ return [
                         'id' => '[0-9]*',
                     ],
                     'defaults' => [
-                        'controller'    => Controller\RoleController::class,
+                        'controller'    => 'rolebeheer',
                         'action'        => 'index',
                     ],
                 ],
@@ -104,7 +104,7 @@ return [
                         'id' => '[0-9]*',
                     ],
                     'defaults' => [
-                        'controller'    => Controller\PermissionController::class,
+                        'controller'    => 'permissionbeheer',
                         'action'        => 'index',
                     ],
                 ],
@@ -117,6 +117,11 @@ return [
             Controller\PermissionController::class => Controller\Factory\PermissionControllerFactory::class,
             Controller\RoleController::class => Controller\Factory\RoleControllerFactory::class,    
             Controller\UserController::class => Controller\Factory\UserControllerFactory::class, 
+        ],
+        'aliases' => [
+            'permissionbeheer' => Controller\PermissionController::class,
+            'rolebeheer' => Controller\RoleController::class,
+            'userbeheer' => Controller\UserController::class
         ],
     ],
     // We register module-provided controller plugins under this key.
@@ -134,18 +139,18 @@ return [
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [
         'controllers' => [
-            Controller\UserController::class => [
+            'userbeheer'  => [
                 // Give access to "resetPassword", "message" and "setPassword" actions
                 // to anyone.
                 ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
                 // Give access to "index", "add", "edit", "view", "changePassword" actions to users having the "user.manage" permission.
                 ['actions' => ['index', 'add', 'edit', 'view', 'changePassword'], 'allow' => '+user.manage']
             ],
-            Controller\RoleController::class => [
+            'rolebeheer' => [
                 // Allow access to authenticated users having the "role.manage" permission.
                 ['actions' => '*', 'allow' => '+role.manage']
             ],
-            Controller\PermissionController::class => [
+            'permissionbeheer' => [
                 // Allow access to authenticated users having "permission.manage" permission.
                 ['actions' => '*', 'allow' => '+permission.manage']
             ],
