@@ -29,7 +29,7 @@ class Permission
     protected $description;
 
     /** 
-     * @ORM\Column(name="date_created", type="datetime", nullable=false)
+     * @ORM\Column(name="date_created", type="datetime", nullable=true)
      */
     protected $dateCreated;
     
