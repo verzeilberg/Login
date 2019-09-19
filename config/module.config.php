@@ -11,7 +11,7 @@ return [
             'password_reset_token_mail' => [
                 'subject' => 'Password Reset',
                 'sender_mail' => 'no-reply@example.com',
-                'sender_name' => 'User Demo',
+                'sender_name' => 'Xml service',
             ]
         ]
     ],
