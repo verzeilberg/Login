@@ -145,6 +145,7 @@ class RoleManager
                     'user.manage',
                     'role.manage',
                     'permission.manage',
+                    'xsd.manage',
                     'profile.any.view',
                 ],
             ],

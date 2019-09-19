@@ -104,6 +104,7 @@ class PermissionManager
             'role.manage' => 'Manage roles',
             'profile.any.view' => 'View anyone\'s profile',
             'profile.own.view' => 'View own profile',
+            'xsd.manage' => 'Manage xsd files',
         ];
         
         foreach ($defaultPermissions as $name=>$description) {
