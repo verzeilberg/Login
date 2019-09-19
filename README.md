@@ -1,9 +1,9 @@
 # Login
 
-##Description
+## Description
 This is a third party login module to create permissions, roles and users to manage the acces to your web app or website.
 
-##How to use
+## How to use
 
 put below code into your .gitmodules file and update your submodules:
 
