@@ -1,0 +1,71 @@
+<html>
+<style>
+    h3 {
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 4.5em;
+        color: #000000;
+        letter-spacing: 4px;
+    }
+</style>
+<center>
+    <table style="background-color: #FDCB2D; box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2), 0 0 20px 0 rgba(0, 0, 0, 0.19); min-width:100%;max-width: 100%;">
+        <tr>
+            <td>
+                <div style="
+                        min-width:100%;
+                        min-height: 200px;
+                        background-image: url('<?= $baseUrl . $config['token']['defaultLogo']; ?>');
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        ">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                   <h3><?= $config['token']['mailtoken_header_name']; ?></h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>(dit is een automatisch gegenereerd bericht)</p>
+                <p>Er is een token aangevraagd voor de gebruiker <strong><?= $user->getEmail() ?></strong></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <?php if ($config['token']['only_token_code']) : ?>
+                    <p>
+                        Gebruik deze code <u><strong><?= substr($token->getToken(), -5); ?></strong></u> die u kunt
+                        invoeren waar de token is aangevraagd.</p>
+                    <p>
+                <?php else: ?>
+                    <p>
+                        Gebruik <a href="<?= rtrim($baseUrl, '/'); ?><?= $this->url('validate-token', [],
+                            ['query' => ['token' => $token->getToken()]]) ?>">deze link</a> om het token te activeren op
+                        deze PC en in te loggen
+                        of gebruik deze code <u><strong><?= substr($token->getToken(), -5); ?></strong></u> die u kunt
+                        invoeren waar de token is aangevraagd.</p>
+                    <p>
+            <span style="color: red;">
+                <u>Indien bovenstaande link niet opent in de browser waarmee u het token heeft aangevraagd</u>, kopieer dan de onderstaande URL naar de adresbalk van de browser waarmee u het token heeft aangevraagd:
+            </span>
+                        <br/>
+                        <br>
+                        <?= rtrim($baseUrl, '/'); ?><?= $this->url('validate-token', [],
+                            ['query' => ['token' => $token->getToken()]]) ?>
+                    </p>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <div class="col-lg-10 mx-auto text-center">
+                    <hr class="small">
+                    <p>&copy; 2016 - <?php echo date('Y') ?></p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</center>
+</html>

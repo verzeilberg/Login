@@ -2,6 +2,8 @@
 namespace User\Service;
 
 use Zend\Authentication\Result;
+use User\Service\Helper\AuthResult;
+use Zend\Session\Container;
 
 /**
  * The AuthManager service is responsible for user's login/logout and simple access 
@@ -88,9 +90,11 @@ class AuthManager
         if ($this->authService->getIdentity()==null) {
             throw new \Exception('The user is not logged in');
         }
-        
+
         // Remove identity from session.
-        $this->authService->clearIdentity();               
+        $this->authService->clearIdentity();
+        $tokenContainer = new Container('UserToken');
+        $tokenContainer->getManager()->getStorage()->clear();
     }
     
     /**
@@ -165,5 +169,22 @@ class AuthManager
         
         // Permit access to this page.
         return self::ACCESS_GRANTED;
+    }
+
+    /**
+     * Active check if user has a state that is not allowed
+     * @return bool
+     */
+    public function reloadUser()
+    {
+        $authAdapter = $this->authService->getAdapter();
+
+        $user = $this->authService->getIdentity();
+        $user = $authAdapter->reloadUser($user);
+
+        //This forces to reload premissions of roles
+        $this->rbacManager->init(true);
+
+        return $user;
     }
 }

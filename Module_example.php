@@ -5,13 +5,13 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace User;
+namespace SiteUser;
 
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\AbstractActionController;
-use User\Controller\AuthController;
-use User\Controller\TokenController;
-use User\Service\AuthManager;
+use SiteUser\Controller\AuthController;
+use SiteUser\Controller\TokenController;
+use SiteUser\Service\AuthManager;
 use Zend\Session\Container;
 
 class Module
@@ -23,45 +23,45 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
+    
     /**
      * This method is called once the MVC bootstrapping is complete and allows
-     * to register event listeners.
+     * to register event listeners. 
      */
     public function onBootstrap(MvcEvent $event)
     {
         // Get event manager.
         $eventManager = $event->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
-        // Register the event listener method.
-        $sharedEventManager->attach(AbstractActionController::class,
-            MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
-
+        // Register the event listener method. 
+        $sharedEventManager->attach(AbstractActionController::class, 
+                MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
+        
         $sessionManager = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager');
-
+        
         $this->forgetInvalidSession($sessionManager);
     }
-
-    protected function forgetInvalidSession($sessionManager)
+    
+    protected function forgetInvalidSession($sessionManager) 
     {
-        try {
-            $sessionManager->start();
-            return;
-        } catch (\Exception $e) {
-        }
-        /**
-         * Session validation failed: toast it and carry on.
-         */
-        // @codeCoverageIgnoreStart
-        session_unset();
-        // @codeCoverageIgnoreEnd
+    	try {
+    		$sessionManager->start();
+    		return;
+    	} catch (\Exception $e) {
+    	}
+    	/**
+    	 * Session validation failed: toast it and carry on.
+    	 */
+    	// @codeCoverageIgnoreStart
+    	session_unset();
+    	// @codeCoverageIgnoreEnd
     }
-
+    
     /**
      * Event listener method for the 'Dispatch' event. We listen to the Dispatch
      * event to call the access filter. The access filter allows to determine if
      * the current visitor is allowed to see the page or not. If he/she
-     * is not authorized and is not allowed to see the page, we redirect the user
+     * is not authorized and is not allowed to see the page, we redirect the user 
      * to the login page.
      *
      * @todo check if this realy not getting triggerd when api is called
@@ -73,30 +73,30 @@ class Module
         $controller = $event->getTarget();
         $controllerName = $event->getRouteMatch()->getParam('controller', null);
         $actionName = $event->getRouteMatch()->getParam('action', null);
-
+        
         // Convert dash-style action name to camel-case.
         $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
-
+        
         // Get the instance of AuthManager service.
         $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);
 
         //Site user config array
-        $siteUserconfig = $event->getApplication()->getServiceManager()->get('config')['user'];
+        $siteUserconfig = $event->getApplication()->getServiceManager()->get('config')['siteuser'];
         $tokenConfig = $siteUserconfig['token'];
 
 
         //ignore_route_keys
         $routerIgnoreKeys = $siteUserconfig['ignore_route_keys'];
-
+        
         $routerKey = $event->getRouteMatch()->getMatchedRouteName();
-
+    
         //return if ignore route in key list
         if (in_array($routerKey,$routerIgnoreKeys)) {return;}
 
         $routerIgnorePartial = false;
         //check if route key contains .rest.
         $routerIgnoreKeysPartial = $siteUserconfig['ignore_route_keys_partial'];
-
+    
         foreach ($routerIgnoreKeysPartial as $routerIgnoreKeyPartial) {
             $pos = strpos($routerKey, $routerIgnoreKeyPartial);
             if ($pos === false) { continue; }
@@ -104,8 +104,8 @@ class Module
             $routerIgnorePartial = true;
             break;
         }
-
-
+    
+    
         if ($routerIgnorePartial) {return;}
         //zend auth service to get identity
         $authenticationService = $event->getApplication()->getServiceManager()->get(\Zend\Authentication\AuthenticationService::class);
@@ -114,6 +114,7 @@ class Module
         // UserToken auth
         // Execute the token check on every controller except AuthController
         // (to avoid infinite redirect)
+
 
         if ($authenticationService->hasIdentity() &&
             $tokenConfig['active'] == true        &&
@@ -136,9 +137,9 @@ class Module
                     $tokenContainer->token_valid_until = $datetime->getTimestamp();
                 }
 
-                $currentUser = $authManager->reloadUser();
                 // Additional token check if the token has the same user id
-                if ($tokenContainer->token_user_id != $currentUser->getId()) {
+                if ($tokenContainer->token_user_id != $authenticationService->getIdentity()->getId()
+                ) {
                     $tokenContainer->token_valid_until = null;
                     return $controller->redirect()->toRoute('request-token');
                 }
@@ -159,6 +160,14 @@ class Module
             }
         }
 
+        //Status check of user
+        if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Zend\Console\Request::class)
+        {
+            //if not true it means the user is blocked
+            if(!$authManager->statusCheck()) {
+                $authManager->logout();
+            }
+        }
 
 
         // Execute the access filter on every controller except AuthController
@@ -168,6 +177,10 @@ class Module
         // remove $authManager->reloadUser(); to enable caching but this will have impact on update user and roles
         if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Zend\Console\Request::class)
         {
+            if ($authenticationService->hasIdentity()) {
+                $authManager->reloadUser();//this wont do roles these are changed in rbacManager with this function !
+            }
+
             $result = $authManager->filterAccess($controllerName, $actionName);
 
             if ($result==AuthManager::AUTH_REQUIRED) {
@@ -183,8 +196,8 @@ class Module
                 $redirectUrl = $uri->toString();
 
                 // Redirect the user to the "Login" page.
-                return $controller->redirect()->toRoute('login', [],
-                    ['query'=>['redirectUrl'=>$redirectUrl]]);
+                return $controller->redirect()->toRoute('login', [], 
+                        ['query'=>['redirectUrl'=>$redirectUrl]]);
             }
             else if ($result==AuthManager::ACCESS_DENIED) {
                 // Redirect the user to the "Not Authorized" page.

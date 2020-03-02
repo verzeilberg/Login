@@ -1,0 +1,62 @@
+<?php
+$this->headTitle('Validate token');
+
+$this->mainMenu()->setActiveItemId('validate-token');
+
+$this->pageBreadcrumbs()->setItems([
+    'Home' => $this->url('home'),
+    'Aanvragen token' => $this->url('request-token'),
+    'Activeren' => $this->url('validate-token')
+]);
+
+?>
+<div class="row page-header">
+    <h1 class="col text-center">
+        Token activeren
+        <small><?= $this->escapeHtml($this->currentUser()->getEmail()) ?></small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col text-center">
+        <p>
+            Deze applicatie maakt als extra beveiliging gebruik van E-mail tokens.<br/>
+            In de vorige stap heeft u een token aangevraad, deze heeft u ontvangen via de e-mail.<br/>
+            Klik op de link in de e-mail of vul de code van de mail in het invoerveld en klik op activeer token.
+        </p>
+        <p>
+            <dt>Gebruiker:</dt>
+        <dd>
+            <?php echo $this->currentUser()->getFullName(); ?> (<a href="<?php echo $this->url('logout'); ?>">uitloggen</a>)
+        </dd>
+        <dt>E-mail adres:</dt>
+        <dd><?php echo $this->currentUser()->getEmail(); ?></dd>
+        <br/>
+        </p>
+    </div>
+</div>
+<form name="validate_token" method="POST" action="<?php echo $this->url('validate-token'); ?>">
+    <div class="form-group row">
+        <div class="col-md-2 offset-md-5">
+            <input type="text" name="token_code" class="form-control" placeholder="Token code"></dt>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col text-center">
+            <dd><input name="validate_token" type="submit" value="Activeer token" class="btn btn-success"></dd>
+        </div>
+    </div>
+</form>
+<?php if (is_array($validToken)) : ?>
+    <div class="row">
+        <div class="col text-center">
+            <p class="text-danger">Tijdens het activeren van het token zijn er de volgende fout(en) opgetreden.</p>
+            <p class="">U kunt opnieuw een token aanvragen door op deze <a class="btn btn-info"
+                                                                           href="<?php $this->url('request-token') ?>">knop</a>
+                te klikken.</p>
+            <?php foreach ($validToken as $errors) : ?>
+                <p class="alert alert-danger"><?= $errors ?></p>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>

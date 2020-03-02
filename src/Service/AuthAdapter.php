@@ -103,6 +103,15 @@ class AuthAdapter implements AdapterInterface
                 null, 
                 ['Invalid credentials.']);        
     }
+
+    public function reloadUser($user)
+    {
+
+        $user = $this->entityManager->getRepository(\User\Entity\User::class)
+            ->findOneBy(['email' => $user]);
+
+        return $user;
+    }
 }
 
 
