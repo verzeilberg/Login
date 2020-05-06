@@ -2,7 +2,7 @@
 
 namespace User\Service\Helper;
 
-use Zend\Authentication\Result;
+use Laminas\Authentication\Result;
 
 class AuthResult extends Result
 {

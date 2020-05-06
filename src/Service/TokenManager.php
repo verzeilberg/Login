@@ -2,20 +2,20 @@
 namespace User\Service;
 
 use User\Entity\User;
-use Zend\Math\Rand;
-use Zend\Authentication\AuthenticationService;
+use Laminas\Math\Rand;
+use Laminas\Authentication\AuthenticationService;
 use Doctrine\ORM\EntityManager;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\Mail;
-use Zend\Mime\Part as MimePart;
-use Zend\Mime\Message as MimeMessage;
-use Zend\View\Model\ViewModel;
-use Zend\Validator\NotEmpty;
-use Zend\Validator\EmailAddress;
-use Zend\Validator\Hostname;
-use Zend\Mail\Message;
+use Laminas\View\Renderer\PhpRenderer;
+use Laminas\Mail;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\View\Model\ViewModel;
+use Laminas\Validator\NotEmpty;
+use Laminas\Validator\EmailAddress;
+use Laminas\Validator\Hostname;
+use Laminas\Mail\Message;
 use User\Entity\Token;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * This service is responsible for adding/editing users

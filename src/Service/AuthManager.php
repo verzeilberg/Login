@@ -1,9 +1,9 @@
 <?php
 namespace User\Service;
 
-use Zend\Authentication\Result;
+use Laminas\Authentication\Result;
 use User\Service\Helper\AuthResult;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * The AuthManager service is responsible for user's login/logout and simple access 
@@ -19,13 +19,13 @@ class AuthManager
     
     /**
      * Authentication service.
-     * @var \Zend\Authentication\AuthenticationService
+     * @var \Laminas\Authentication\AuthenticationService
      */
     private $authService;
     
     /**
      * Session manager.
-     * @var Zend\Session\SessionManager
+     * @var Laminas\Session\SessionManager
      */
     private $sessionManager;
     

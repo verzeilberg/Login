@@ -2,10 +2,10 @@
 
 namespace User\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 use User\Service\Helper\AuthResult;
-use Zend\Uri\Uri;
+use Laminas\Uri\Uri;
 use User\Form\LoginForm;
 use SiteUser\Entity\User;
 use Doctrine\ORM\EntityManager;

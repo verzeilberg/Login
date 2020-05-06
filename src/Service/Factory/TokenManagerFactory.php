@@ -17,7 +17,7 @@ class TokenManagerFactory
     {        
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $siteUserConfig = $container->get('config')['user'];
-        $authenticationService = $container->get(\Zend\Authentication\AuthenticationService::class);
+        $authenticationService = $container->get(\Laminas\Authentication\AuthenticationService::class);
         $viewRenderer = $container->get('ViewRenderer');
 
         return new TokenManager($entityManager, $siteUserConfig, $authenticationService, $viewRenderer);

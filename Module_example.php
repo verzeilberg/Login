@@ -7,12 +7,12 @@
 
 namespace SiteUser;
 
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Controller\AbstractActionController;
 use SiteUser\Controller\AuthController;
 use SiteUser\Controller\TokenController;
 use SiteUser\Service\AuthManager;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 class Module
 {
@@ -37,7 +37,7 @@ class Module
         $sharedEventManager->attach(AbstractActionController::class, 
                 MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
         
-        $sessionManager = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager');
+        $sessionManager = $event->getApplication()->getServiceManager()->get('Laminas\Session\SessionManager');
         
         $this->forgetInvalidSession($sessionManager);
     }
@@ -108,7 +108,7 @@ class Module
     
         if ($routerIgnorePartial) {return;}
         //zend auth service to get identity
-        $authenticationService = $event->getApplication()->getServiceManager()->get(\Zend\Authentication\AuthenticationService::class);
+        $authenticationService = $event->getApplication()->getServiceManager()->get(\Laminas\Authentication\AuthenticationService::class);
 
 
         // UserToken auth
@@ -161,7 +161,7 @@ class Module
         }
 
         //Status check of user
-        if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Zend\Console\Request::class)
+        if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Laminas\Console\Request::class)
         {
             //if not true it means the user is blocked
             if(!$authManager->statusCheck()) {
@@ -175,7 +175,7 @@ class Module
         // reload user on redirect
         // reload roles on redirect
         // remove $authManager->reloadUser(); to enable caching but this will have impact on update user and roles
-        if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Zend\Console\Request::class)
+        if ($controllerName != AuthController::class && get_class($event->getApplication()->getRequest()) !== \Laminas\Console\Request::class)
         {
             if ($authenticationService->hasIdentity()) {
                 $authManager->reloadUser();//this wont do roles these are changed in rbacManager with this function !
