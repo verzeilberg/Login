@@ -130,6 +130,16 @@ return [
                     ],
                 ],
             ],
+            'profile' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/profile',
+                    'defaults' => [
+                        'controller' => 'profile',
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -139,11 +149,13 @@ return [
             Controller\RoleController::class => Controller\Factory\RoleControllerFactory::class,
             Controller\UserController::class => Controller\Factory\UserControllerFactory::class,
             Controller\TokenController::class => Controller\Factory\TokenControllerFactory::class,
+            Controller\ProfileController::class => Controller\Factory\ProfileControllerFactory::class,
         ],
         'aliases' => [
             'permissionbeheer' => Controller\PermissionController::class,
             'rolebeheer' => Controller\RoleController::class,
-            'userbeheer' => Controller\UserController::class
+            'userbeheer' => Controller\UserController::class,
+            'profile' => Controller\ProfileController::class
         ],
     ],
     // We register module-provided controller plugins under this key.
@@ -179,6 +191,10 @@ return [
             Controller\TokenController::class => [
                 //All logged in user can have acces to token controller and actions
                 ['actions' => ['requestToken', 'validateToken'], 'allow' => '@']
+            ],
+            'profile' => [
+                // Allow access to authenticated users having "permission.manage" permission.
+                ['actions' => '*', 'allow' => '*']
             ],
         ]
     ],

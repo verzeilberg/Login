@@ -97,8 +97,6 @@ $this->headScript()->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/
 
 <div style="text-align: center;">
     <h3>Token aanvragen</h3>
-
-
     <?php if ($this->currentUser() == ''): ?>
         <p style="color: red; text-align: center; margin-bottom: 2em;">
             Geen E-mail adres bekend voor deze gebruiker, neem contact op met <?= $siteUserConfig['mailtoken_no_mail_msg']; ?>
@@ -107,6 +105,7 @@ $this->headScript()->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/
             Gebruiker: <strong><?php echo $this->currentUser()->getUsername() ?></strong> (<a href="<?php echo $this->url('logout'); ?>">uitloggen</a>)<br />
         </p>
     <?php else: ?>
+
         <p class="text-center">
             Deze applicatie maakt als extra beveiliging gebruik van E-mail tokens.<br />
             Om het browser token op deze PC (opnieuw) te activeren klikt u op 'Verzenden'.<br />
@@ -119,10 +118,17 @@ $this->headScript()->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/
                 <dt>E-mail adres:</dt>
                 <dd><?php echo $this->currentUser()->getEmail(); ?></dd>
                 <hr/>
+
+
+
+
                 <form name="request_token" method="POST" action="<?php echo $this->url('request-token'); ?>">
                     <input name="request_token" type="submit" class="btn btn-success" value="Verzenden" data-go="false" />
                     <input type="hidden" name="send_tokenlink" value="1" />
                 </form>
+
+
+
             </dl>
         </div>
         <div class="container">

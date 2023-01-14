@@ -81,7 +81,7 @@ class TokenManager
         $viewRenderer = $this->viewRenderer;
         $email_body = $viewRenderer->render($view);
 
-        $mail = new Mail\Message();
+        $mail = new \Laminas\Mail\Message();
         $mail->setEncoding("UTF-8");
 
         $html = new MimePart($email_body);

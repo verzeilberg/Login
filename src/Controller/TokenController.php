@@ -72,6 +72,7 @@ class TokenController extends AbstractActionController
      */
     public function requestTokenAction()
     {
+
         if ($this->params()->fromPost('send_tokenlink') == '1') {
             $uri = $this->getRequest()->getUri();
             $baseUrl = sprintf('%s://%s/', $uri->getScheme(), $uri->getHost());
