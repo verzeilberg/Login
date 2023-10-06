@@ -1,69 +1,81 @@
-<?php
-$this->headTitle('Users');
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="bg-secondary rounded  p-4">
+                <div class="row g-4">
+                    <h2 class="col-sm-12 col-md-12 col-xl-12 mb-4">Manage Users</h2>
+                </div>
+                <div class="row g-4">
+                    <div class="col-sm-6 col-md-6 col-xl-6">
+                        <a class="btn btn-primary" href="<?= $this->url('users', ['action' => 'add']); ?>">
+                            <i class="fas fa-plus-square"></i> New User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="bg-secondary rounded  p-4">
+                <table class="table table-bordered table-hover table-striped">
 
-$this->mainMenu()->setActiveItemId('users');
+                    <tr>
+                        <th>ID</th>
+                        <th>E-mail</th>
+                        <th>Full Name</th>
+                        <th>Role(s)</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
 
-$this->pageBreadcrumbs()->setItems([
-            'Home'=>$this->url('home'),
-            'Manage Users'=>$this->url('users'),
-            ]);
-?>
+                    <?php foreach ($users as $user): ?>
 
-<h1>Manage Users</h1>
+                        <tr>
+                            <td><?= $this->escapeHtml($user->getId()); ?></td>
+                            <td>
+                                <a href="<?= $this->url('users', ['action' => 'view', 'id' => $user->getId()]); ?>">
+                                    <?= $this->escapeHtml($user->getEmail()); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <?= $this->escapeHtml($user->getFullName()); ?></a>
+                            </td>
+                            <td>
+                                <?= $this->escapeHtml($user->getRolesAsString()); ?></a>
+                            </td>
+                            <td>
+                                <nobr><?= (is_object($user->getDateCreated()) ? $this->escapeHtml($user->getDateCreated()->format('Y-m-d')) : ''); ?></nobr>
+                            </td>
+                            <td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
+                            <td>
+                                <a class="btn btn-info" href="<?= $this->url('users',
+                                    ['action' => 'edit', 'id' => $user->getId()]); ?>">
+                                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                                </a>
+                                <a class="btn btn-primary" href="<?= $this->url('users',
+                                    ['action' => 'change-password', 'id' => $user->getId()]); ?>">
+                                    <span class="glyphicon glyphicon-asterisk"></span> Change Password
+                                </a>
+                            </td>
+                        </tr>
 
-<p>
-<a class="btn btn-primary" href="
-    <?= $this->url('users', ['action'=>'add']); ?>">
-    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New User
-</a>
-</p>
+                    <?php endforeach; ?>
 
-<table class="table table-striped">
-
-   <tr>
-        <th>ID</th>
-        <th>E-mail</th>
-        <th>Full Name</th>
-        <th>Role(s)</th>        
-        <th>Date Created</th>
-        <th>Status</th>        
-        <th>Actions</th>        
-    </tr>
-    
-    <?php foreach ($users as $user): ?>
-    
-    <tr>
-        <td><?= $this->escapeHtml($user->getId()); ?></td>
-        <td>
-            <a href="<?= $this->url('users', ['action'=>'view', 'id'=>$user->getId()]); ?>">
-                <?= $this->escapeHtml($user->getEmail()); ?>
-            </a> 
-        </td>
-        <td>
-            <?= $this->escapeHtml($user->getFullName()); ?></a> 
-        </td>
-        <td>
-            <?= $this->escapeHtml($user->getRolesAsString()); ?></a> 
-        </td>
-        <td><nobr><?= (is_object($user->getDateCreated()) ? $this->escapeHtml($user->getDateCreated()->format('Y-m-d')): ''); ?></nobr></td>        
-        <td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
-        <td>
-            <a class="btn btn-info" href="<?= $this->url('users', 
-                    ['action'=>'edit', 'id'=>$user->getId()]); ?>">
-                <span class="glyphicon glyphicon-pencil" ></span> Edit
-            </a>
-            <a class="btn btn-primary" href="<?= $this->url('users',
-                    ['action'=>'change-password', 'id'=>$user->getId()]); ?>">
-                <span class="glyphicon glyphicon-asterisk"></span> Change Password
-            </a>
-        </td>    
-    </tr>
-        
-    <?php endforeach; ?>   
-    
-</table>
-
-<?= $this->paginationControl($users,
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="bg-secondary rounded  mt-4 p-4">
+                <?= $this->paginationControl($users,
                     'Sliding',
-                    'user/partial/paginator', 
-                    array('route' => 'users')); ?>
+                    'user/partial/paginator',
+                    array('route' => 'users')) ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

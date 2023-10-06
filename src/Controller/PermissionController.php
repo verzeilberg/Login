@@ -39,6 +39,7 @@ class PermissionController extends AbstractActionController
      */
     public function indexAction() 
     {
+        $this->layout('layout/beheer');
         $permissions = $this->entityManager->getRepository(Permission::class)
                 ->findBy([], ['name'=>'ASC']);
         
@@ -52,6 +53,7 @@ class PermissionController extends AbstractActionController
      */
     public function addAction()
     {
+        $this->layout('layout/beheer');
         // Create form
         $form = new PermissionForm('create', $this->entityManager);
         
@@ -90,6 +92,7 @@ class PermissionController extends AbstractActionController
      */
     public function viewAction() 
     {
+        $this->layout('layout/beheer');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);
@@ -115,6 +118,7 @@ class PermissionController extends AbstractActionController
      */
     public function editAction()
     {
+        $this->layout('layout/beheer');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);

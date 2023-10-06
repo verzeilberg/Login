@@ -42,6 +42,7 @@ class UserController extends AbstractActionController
      */
     public function indexAction() 
     {
+        $this->layout('layout/beheer');
         // Access control.
         if (!$this->access('user.manage')) {
             $this->getResponse()->setStatusCode(401);
@@ -66,6 +67,7 @@ class UserController extends AbstractActionController
      */
     public function addAction()
     {
+        $this->layout('layout/beheer');
         // Create user form
         $form = new UserForm('create', $this->entityManager);
         
@@ -112,6 +114,7 @@ class UserController extends AbstractActionController
      */
     public function viewAction() 
     {
+        $this->layout('layout/beheer');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);
@@ -137,6 +140,7 @@ class UserController extends AbstractActionController
      */
     public function editAction() 
     {
+        $this->layout('layout/beheer');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);
@@ -211,6 +215,7 @@ class UserController extends AbstractActionController
      */
     public function changePasswordAction() 
     {
+        $this->layout('layout/beheer');
         $id = (int)$this->params()->fromRoute('id', -1);
         if ($id<1) {
             $this->getResponse()->setStatusCode(404);
