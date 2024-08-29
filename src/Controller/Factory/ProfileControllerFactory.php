@@ -4,6 +4,7 @@ namespace User\Controller\Factory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use User\Controller\ProfileController;
+use User\Entity\User;
 use User\Service\UserManager;
 
 /**
@@ -16,8 +17,9 @@ class ProfileControllerFactory implements FactoryInterface
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $userManager = $container->get(UserManager::class);
-        
+        $userRepository = $entityManager->getRepository(User::class);
+
         // Instantiate the controller and inject dependencies
-        return new ProfileController($entityManager, $userManager);
+        return new ProfileController($userRepository, $userManager);
     }
 }

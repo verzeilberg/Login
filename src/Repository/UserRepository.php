@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Laminas\Paginator\Paginator;
+use Doctrine\ORM\Query;
 /*
  * Entity
  */
@@ -19,16 +20,16 @@ class UserRepository extends EntityRepository
      * Retrieves all users in descending dateCreated order.
      * @return Query
      */
-    public function findAllUsers()
+    public function getAllUsers(): Query
     {
         $entityManager = $this->getEntityManager();
-        
+
         $queryBuilder = $entityManager->createQueryBuilder();
-        
+
         $queryBuilder->select('u')
             ->from(User::class, 'u')
             ->orderBy('u.dateCreated', 'DESC');
-        
+
         return $queryBuilder->getQuery();
     }
 

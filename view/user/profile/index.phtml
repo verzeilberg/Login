@@ -1,0 +1,32 @@
+<div class="most-popular module-page">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="heading-section">
+                <h4><em>Gebruikers</em> Right Now</h4>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <table class="table table-sm">
+                        <tr>
+                            <th>
+                                E-mail
+                            </th>
+                        </tr>
+                        <?php foreach ($users as $user) { ?>
+                            <tr>
+                                <td>
+                                    <?= $user->getEmail(); ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+            </div>
+            <!-- Pagination -->
+            <?php
+            echo $this->paginationControl($users, 'Sliding', 'partial/paginator');
+            ?>
+        </div>
+    </div>

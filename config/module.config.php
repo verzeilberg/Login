@@ -133,12 +133,25 @@ return [
             'profile' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route' => '/profile',
+                    'route' => '/profiles',
                     'defaults' => [
                         'controller' => 'profile',
                         'action' => 'index',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'blog' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/profiles[[/]:action[/:id]]',
+                            'defaults' => [
+                                'controller' => 'profile',
+                                'action' => 'profile',
+                            ],
+                        ],
+                    ],
+                ]
             ],
         ],
     ],
@@ -189,12 +202,12 @@ return [
                 ['actions' => '*', 'allow' => '+permission.manage']
             ],
             Controller\TokenController::class => [
-                //All logged in user can have acces to token controller and actions
+                //All logged-in user can have acces to token controller and actions
                 ['actions' => ['requestToken', 'validateToken'], 'allow' => '@']
             ],
             'profile' => [
                 // Allow access to authenticated users having "permission.manage" permission.
-                ['actions' => '*', 'allow' => '*']
+                ['actions' => ['index', 'profile'], 'allow' => '@docker compose up']
             ],
         ]
     ],
